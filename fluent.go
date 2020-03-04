@@ -66,7 +66,7 @@ func (f *FluentHook) buildMessage(entry *logrus.Entry) map[string]interface{} {
 		case string:
 			if len(v) > f.fieldSizeLimit {
 				data["i_"+k+"_size"] = len(v)
-				data["s_truncated"] = true
+				data["b_truncated"] = true
 				v = v[:f.fieldSizeLimit]
 			}
 			data["s_"+k] = v
@@ -78,7 +78,7 @@ func (f *FluentHook) buildMessage(entry *logrus.Entry) map[string]interface{} {
 			s := fmt.Sprintf("%+v", v)
 			if len(s) > f.fieldSizeLimit {
 				data["i_"+k+"_size"] = len(s)
-				data["s_truncated"] = true
+				data["b_truncated"] = true
 				s = s[:f.fieldSizeLimit]
 			}
 			data["t_"+k] = s
