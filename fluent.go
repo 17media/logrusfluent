@@ -7,6 +7,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	// minFieldSizeLimit is the min value of fieldSizeLimit to avoid unexpected setting of FluentHook
+	minFieldSizeLimit = 1024
+)
+
 // FluentHook to send logs via fluentd.
 type FluentHook struct {
 	Fluent         *fluent.Fluent
@@ -19,6 +24,9 @@ func NewFluentHook(config fluent.Config, fieldSizeLimit int) (*FluentHook, error
 	logger, err := fluent.New(config)
 	if err != nil {
 		return nil, err
+	}
+	if fieldSizeLimit < minFieldSizeLimit {
+		return nil, fmt.Errorf("fieldSizeLimit:%d can't be smaller than '%d'", fieldSizeLimit, minFieldSizeLimit)
 	}
 	return &FluentHook{
 		Fluent:         logger,
